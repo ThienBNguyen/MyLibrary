@@ -1,31 +1,38 @@
-const mongoose = require("mongoose");
-
+const mongoose = require('mongoose');
+const coverImageBasePath = 'uploads/bookCovers';
+const oath = require('path');
+const { pathToFileURL } = require('url');
 const bookSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
-    type: String
+    type: String,
   },
   publishDate: {
-    type: Data,
-    required: true
+    type: Date,
+    required: true,
   },
   createAt: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date.now,
   },
   coverImageName: {
     type: String,
-    required: true
+    required: true,
   },
   author: {
-    type: mongoose.schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "Author"
+    ref: 'Author',
+  },
+});
+bookSchema.virtual('coverImagePath').get(function () {
+  if (this.coverImageName != null) {
+    return path.join('/', coverImageBasePath, this.coverImageName);
   }
 });
-
-module.exports = mongoose.model("Book", bookSchema);
+module.exports = mongoose.model('Book', bookSchema);
+module.exports.coverImageBasePath = coverImageBasePath;
